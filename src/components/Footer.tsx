@@ -1,39 +1,40 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   Facebook,
-  Twitter,
   Linkedin,
   Instagram,
-  Github,
   ArrowUp,
 } from "lucide-react";
+import {
+  FOOTER_COMPANY_LINKS,
+  FOOTER_SERVICES_LINKS,
+  FOOTER_LEGAL_LINKS,
+  type SocialLink,
+} from "@/config/navigation";
 
 const footerLinks = {
-  company: [
-    { name: "About Us", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact" },
-  ],
-  services: [
-    { name: "Web Development", href: "#services" },
-    { name: "Mobile Apps", href: "#services" },
-    { name: "Cloud Solutions", href: "#services" },
-    { name: "IT Consulting", href: "#services" },
-  ],
-  legal: [
-    { name: "Privacy Policy", href: "#" },
-    { name: "Terms of Service", href: "#" },
-    { name: "Cookie Policy", href: "#" },
-  ],
+  company: FOOTER_COMPANY_LINKS,
+  services: FOOTER_SERVICES_LINKS,
+  legal: FOOTER_LEGAL_LINKS,
 };
 
-const socialLinks = [
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Github, href: "#", label: "GitHub" },
+const socialLinks: SocialLink[] = [
+  {
+    icon: Facebook,
+    href: "https://www.facebook.com/VisionDynamicPvt",
+    label: "Facebook",
+  },
+  {
+    icon: Instagram,
+    href: "https://www.instagram.com/vision_dynamic_pvt_ltd",
+    label: "Instagram",
+  },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/company/vision-dynamic-pvt-ltd/",
+    label: "LinkedIn",
+  },
 ];
 
 const Footer = () => {
@@ -54,20 +55,32 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <motion.a
-              href="#home"
+            <motion.div
               className="inline-block mb-6"
               whileHover={{ scale: 1.02 }}
             >
-              <span className="text-2xl font-bold font-display">
-                <span className="text-gradient">Vision</span>
-                <span className="text-foreground"> Dynamic</span>
-              </span>
-            </motion.a>
+              <Link to="/">
+                <span className="text-2xl font-bold font-display">
+                  <span className="text-gradient">Vision</span>
+                  <span className="text-foreground"> Dynamic</span>
+                </span>
+              </Link>
+            </motion.div>
             <p className="text-muted-foreground max-w-xs mb-8 leading-relaxed">
               Transforming businesses through innovative technology solutions.
               Your trusted partner for digital excellence.
             </p>
+            <div className="space-y-2 text-sm text-muted-foreground mb-8">
+              <p>
+                Email: <span className="text-foreground">visiondynamicpvt@gmail.com</span>
+              </p>
+              <p>
+                Phone: <span className="text-foreground">+977-981-1130151</span>
+              </p>
+              <p>
+                Address: <span className="text-foreground">Balaju, Kathmandu</span>
+              </p>
+            </div>
             {/* Social Links */}
             <div className="flex gap-3">
               {socialLinks.map((social, index) => (
@@ -91,13 +104,24 @@ const Footer = () => {
             <ul className="space-y-4">
               {footerLinks.company.map((link, index) => (
                 <li key={index}>
-                  <motion.button
-                    onClick={() => scrollToSection(link.href)}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                    whileHover={{ x: 3 }}
-                  >
-                    {link.name}
-                  </motion.button>
+                  {link.isRoute ? (
+                    <Link
+                      to={link.href}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <motion.span whileHover={{ x: 3 }}>
+                        {link.name}
+                      </motion.span>
+                    </Link>
+                  ) : (
+                    <motion.button
+                      onClick={() => scrollToSection(link.href)}
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                      whileHover={{ x: 3 }}
+                    >
+                      {link.name}
+                    </motion.button>
+                  )}
                 </li>
               ))}
             </ul>

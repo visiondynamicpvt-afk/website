@@ -2,14 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-
-const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Services", href: "#services" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
-];
+import { Link } from "react-router-dom";
+import { MAIN_NAV_LINKS } from "@/config/navigation";
+import vdLogo from "../assets/logo.png";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,37 +34,55 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? "glass py-4" : "bg-transparent py-6"
+        isScrolled ? "glass" : "bg-transparent"
       }`}
     >
-      <div className="section-container">
-        <div className="flex items-center justify-between">
+      <div className="section-container h-20 md:h-24 flex items-center">
+        <div className="w-full flex items-center justify-between">
           {/* Logo */}
-          <motion.a
-            href="#home"
-            className="flex items-center gap-2"
-            whileHover={{ scale: 1.02 }}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
           >
-            <span className="text-2xl font-bold font-display">
-              <span className="text-gradient">Vision</span>
-              <span className="text-foreground"> Dynamic</span>
-            </span>
-          </motion.a>
+            <Link to="/">
+              <motion.img
+                src={vdLogo}
+                alt="Company Logo"
+                className="h-28 w-28 object-contain"
+                whileHover={{ rotate: 5 }}
+                transition={{ duration: 0.3 }}
+              />
+            </Link>
+          </motion.div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-10">
-            {navLinks.map((link, index) => (
-              <motion.button
+            {MAIN_NAV_LINKS.map((link, index) => (
+              <motion.div
                 key={link.name}
-                onClick={() => scrollToSection(link.href)}
-                className="text-muted-foreground hover:text-foreground transition-colors link-underline py-1 text-sm font-medium"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
-                whileHover={{ y: -2 }}
               >
-                {link.name}
-              </motion.button>
+                {link.isRoute ? (
+                  <Link
+                    to={link.href}
+                    className="text-muted-foreground hover:text-foreground transition-colors link-underline py-1 text-sm font-medium"
+                  >
+                    <motion.span whileHover={{ y: -2 }}>
+                      {link.name}
+                    </motion.span>
+                  </Link>
+                ) : (
+                  <motion.button
+                    onClick={() => scrollToSection(link.href)}
+                    className="text-muted-foreground hover:text-foreground transition-colors link-underline py-1 text-sm font-medium"
+                    whileHover={{ y: -2 }}
+                  >
+                    {link.name}
+                  </motion.button>
+                )}
+              </motion.div>
             ))}
           </div>
 
@@ -111,17 +124,30 @@ const Navbar = () => {
               className="md:hidden mt-4 pb-4"
             >
               <div className="flex flex-col gap-4">
-                {navLinks.map((link, index) => (
-                  <motion.button
+                {MAIN_NAV_LINKS.map((link, index) => (
+                  <motion.div
                     key={link.name}
-                    onClick={() => scrollToSection(link.href)}
-                    className="text-muted-foreground hover:text-foreground transition-colors text-left py-2"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.05 * index }}
                   >
-                    {link.name}
-                  </motion.button>
+                    {link.isRoute ? (
+                      <Link
+                        to={link.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="text-muted-foreground hover:text-foreground transition-colors text-left py-2 block"
+                      >
+                        {link.name}
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => scrollToSection(link.href)}
+                        className="text-muted-foreground hover:text-foreground transition-colors text-left py-2"
+                      >
+                        {link.name}
+                      </button>
+                    )}
+                  </motion.div>
                 ))}
                 <Button
                   variant="hero"

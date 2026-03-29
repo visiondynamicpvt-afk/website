@@ -10,20 +10,20 @@ const contactInfo = [
   {
     icon: Mail,
     title: "Email Us",
-    value: "hello@visiondynamic.com",
-    href: "mailto:hello@visiondynamic.com",
+    value: "visiondynamicpvt@gmail.com",
+    href: "mailto:visiondynamicpvt@gmail.com",
   },
   {
     icon: Phone,
     title: "Call Us",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
+    value: "+977-981-1130151",
+    href: "tel:+9779811130151",
   },
   {
     icon: MapPin,
     title: "Visit Us",
-    value: "123 Innovation Street, Tech City",
-    href: "#",
+    value: "Balaju, Kathmandu",
+    href: "https://maps.google.com/?q=Balaju,%20Kathmandu",
   },
 ];
 
@@ -36,16 +36,52 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const formData = new FormData(e.currentTarget);
+      
+      // Create object from form data
+      const data = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        subject: formData.get("subject"),
+        message: formData.get("message"),
+        access_key: "b4b26296-03a2-4d15-b0d3-fea8c3b5ca32",
+        redirect: false,
+      };
 
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you as soon as possible.",
-    });
+      // Send to Web3Forms
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Message Sent!",
+          description: "We'll get back to you as soon as possible.",
+        });
+        (e.target as HTMLFormElement).reset();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -101,6 +137,7 @@ const Contact = () => {
                   transition={{ delay: 0.3 }}
                 >
                   <Input
+                    name="name"
                     placeholder="Your Name"
                     required
                     className="bg-card/80 border-border/50 focus:border-primary h-14 rounded-xl backdrop-blur-sm"
@@ -112,6 +149,7 @@ const Contact = () => {
                   transition={{ delay: 0.35 }}
                 >
                   <Input
+                    name="email"
                     type="email"
                     placeholder="Your Email"
                     required
@@ -125,6 +163,7 @@ const Contact = () => {
                 transition={{ delay: 0.4 }}
               >
                 <Input
+                  name="subject"
                   placeholder="Subject"
                   required
                   className="bg-card/80 border-border/50 focus:border-primary h-14 rounded-xl backdrop-blur-sm"
@@ -136,6 +175,7 @@ const Contact = () => {
                 transition={{ delay: 0.45 }}
               >
                 <Textarea
+                  name="message"
                   placeholder="Your Message"
                   required
                   rows={6}
@@ -199,14 +239,22 @@ const Contact = () => {
               </motion.a>
             ))}
 
-            {/* Map placeholder */}
+            {/* Map */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.6 }}
-              className="rounded-2xl overflow-hidden border border-border/50 h-52 bg-card/50 flex items-center justify-center backdrop-blur-sm"
+              className="rounded-2xl overflow-hidden border border-border/50 h-80 bg-card/50 backdrop-blur-sm"
             >
-              <p className="text-muted-foreground">Interactive Map</p>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.0720731229145!2d85.28969807452411!3d27.73385897618479!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb190c5d2f597f%3A0x4b5bd3c72f1f3b18!2sBalaju%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1711739000000"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </motion.div>
           </motion.div>
         </div>

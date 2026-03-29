@@ -2,6 +2,7 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight } from "lucide-react";
+import vdLogo from "../assets/logo.png";
 
 const features = [
   "Cutting-edge Technology Solutions",
@@ -42,9 +43,34 @@ const About = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-              className="relative z-10 rounded-3xl overflow-hidden card-shadow"
+              className="relative z-10 rounded-3xl overflow-hidden card-shadow group"
             >
               <div className="aspect-[4/3] bg-gradient-to-br from-primary/20 via-card to-primary/10 flex items-center justify-center relative">
+                {/* Logo as full background with glowing effect */}
+                <div className="absolute inset-0 flex items-center justify-center p-12">
+                  <motion.img
+                    src={vdLogo}
+                    alt="Vision Dynamic Logo"
+                    className="w-full h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.5 }}
+                  />
+                </div>
+                
+                {/* Animated glow effect behind logo */}
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: [0.2, 0.4, 0.2]
+                  }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                  className="absolute inset-0 bg-gradient-to-r from-primary/30 via-sky-400/30 to-primary/30 blur-3xl"
+                />
+                
                 {/* Animated circles */}
                 <motion.div
                   animate={{ rotate: 360 }}
@@ -57,15 +83,10 @@ const About = () => {
                   className="absolute inset-20 border border-primary/30 rounded-full"
                 />
                 
-                <div className="text-center p-8 relative z-10">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="w-28 h-28 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary to-sky-400 flex items-center justify-center glow"
-                  >
-                    <span className="text-4xl font-bold text-primary-foreground font-display">VD</span>
-                  </motion.div>
+                {/* Text overlay at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 text-center p-8 bg-gradient-to-t from-background/90 via-background/50 to-transparent z-10">
                   <h3 className="text-2xl font-bold text-foreground font-display">Vision Dynamic</h3>
-                  <p className="text-muted-foreground mt-2">Innovating Since 2019</p>
+                  <p className="text-muted-foreground mt-2 font-semibold">Innovating Since 2022</p>
                 </div>
               </div>
             </motion.div>
